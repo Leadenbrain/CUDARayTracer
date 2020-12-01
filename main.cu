@@ -15,9 +15,9 @@
 
 int main(void) {
   float aspect{16.0 / 16.0};
-  int width = 1080;
+  int width = 600;
   int height = static_cast<int>(width/aspect);
-  int ns = 10000;
+  int ns = 500;
   int max_depth = 50;
   int tx = _TX;
   int ty = _TX;
@@ -77,9 +77,9 @@ int main(void) {
       float r = fb[pixel_index].getX();
       float g = fb[pixel_index].getY();
       float b = fb[pixel_index].getZ();
-      r = clamp(r,0.000f,0.999f);
-      g = clamp(g,0.000f,0.999f);
-      b = clamp(b,0.000f,0.999f);
+      r = my_clamp(r,0.000f,0.999f);
+      g = my_clamp(g,0.000f,0.999f);
+      b = my_clamp(b,0.000f,0.999f);
       int ir = static_cast<int>(256 * r);
       int ig = static_cast<int>(256 * g);
       int ib = static_cast<int>(256 * b);
@@ -87,7 +87,7 @@ int main(void) {
     }
   }
 
-  checkCudaErrors(cudaDeviceSynchronize());
+  // checkCudaErrors(cudaDeviceSynchronize());
   free_cornell_scene<<<1,1>>>(d_list,d_world, d_camera);
   checkCudaErrors(cudaGetLastError());
   checkCudaErrors(cudaFree(d_camera));

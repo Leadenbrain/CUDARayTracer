@@ -33,7 +33,7 @@ __global__ void rand_init(curandState* rand_state) {
   }
 }
 
-__host__ __device__ inline float clamp(float x, float min, float max) {
+__host__ __device__ inline float my_clamp(float x, float min, float max) {
   if (x < min)
     return min;
   if (x > max)

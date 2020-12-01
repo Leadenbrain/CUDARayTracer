@@ -170,12 +170,16 @@ __device__ inline bool refract(const vec3& v,
   }
 }
 
-__device__ inline vec3 rand_unit_sphere(curandState* local_rand_state) {
+__device__ inline vec3 rand_sphere(curandState* local_rand_state) {
   vec3 p;
   do {
     p = 2.0f * RANDVEC3 - vec3(1, 1, 1);
   } while (p.norm_sqr() >= 1.0f);
   return p;
+}
+
+__device__ inline vec3 rand_unit_sphere(curandState* local_rand_state) {
+  return unit_v(rand_sphere(local_rand_state));
 }
 
 __device__ vec3 rand_unit_disk(curandState* local_rand_state) {

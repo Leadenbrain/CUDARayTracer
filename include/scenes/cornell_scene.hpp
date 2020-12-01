@@ -28,14 +28,14 @@ __global__ void create_cornell_scene(hit** d_list,
     diffuse* red = new diffuse(color(0.65, 0.05, 0.05));
     diffuse* white = new diffuse(color(0.73, 0.73, 0.73));
     diffuse* green = new diffuse(color(0.12, 0.45, 0.15));
-    diffuse_light* light = new diffuse_light(color(8, 8, 8));
+    diffuse_light* light = new diffuse_light(color(26.656, 15.375, 3.5625));
 
-    d_list[0] = new yz_rectangle(0, 555, 0, 555, 555, red);
-    d_list[1] = new yz_rectangle(0, 555, 0, 555, 0, green);
-    d_list[2] = new xz_rectangle(213, 343, 227, 332, 554, light);
-    d_list[3] = new xz_rectangle(0, 555, 0, 555, 0, white);
-    d_list[4] = new xz_rectangle(0, 555, 0, 555, 555, white);
-    d_list[5] = new xy_rectangle(0, 555, 0, 555, 555, white);
+    d_list[0] = new yz_rectangle(0, 548.8, 0, 559.2, 556, red);
+    d_list[1] = new yz_rectangle(0, 548.8, 0, 559.2, 0, green);
+    d_list[2] = new xz_rectangle(213, 343, 227, 332, 548.7, light);
+    d_list[3] = new xz_rectangle(0, 556, 0, 559.2, 0, white);
+    d_list[4] = new xz_rectangle(0, 556, 0, 559.2, 548.8, white);
+    d_list[5] = new xy_rectangle(0, 556, 0, 548.8, 559.2, white);
     hit* b1 = new cube(point3(0, 0, 0), point3(165, 330, 165), white);
     b1 = new y_rotation(b1, 15.0f);
     b1 = new translate(b1, vec3(265, 0, 295));

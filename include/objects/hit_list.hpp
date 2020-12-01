@@ -38,7 +38,7 @@ __device__ bool hit_list::is_hit(const ray& r,
 }
 
 __device__ bool hit_list::bound_box(float t0, float t1, BB& out) const {
-  if (l_ == NULL)
+  if (n_ == 0)
     return false;
 
   BB temp;

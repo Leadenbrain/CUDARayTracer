@@ -53,20 +53,20 @@ __device__ vec3 ray_color(const ray& r,
   ray temp_r = r;
   vec3 temp_c(1.0f, 1.0f, 1.0f);
   color temp_l;
+  color blue = color(0, 0, 1);
 
   for (int i = 0; i < max_depth; i++) {
     hit_rec rec;
-    if ((*world)->is_hit(temp_r, 0.001f, FLT_MAX, rec)) {
+    if ((*world)->is_hit(temp_r, 0.000001f, FLT_MAX, rec)) {
       ray scat;
       color att;
       if (rec.mat->scatter(temp_r, rec, att, scat, local_rand_state)) {
-        temp_c *= att;
+        temp_c = temp_c * att;
         temp_r = scat;
-        temp_l = rec.mat->emit(rec.u, rec.v, rec.p, local_rand_state);
-        // return temp_c;
+        // temp_l = rec.mat->emit(rec.u, rec.v, rec.p, local_rand_state);
       } else {
         temp_l = rec.mat->emit(rec.u, rec.v, rec.p, local_rand_state);
-        // temp_c = light;
+        // temp_l.make_unit_vector();
         return temp_l * temp_c;
       }
     } else {
@@ -74,7 +74,7 @@ __device__ vec3 ray_color(const ray& r,
       return bg;
     }
   }
-  return vec3(0.0f, 0.0f, 0.0f) + temp_l * temp_c;
+  return vec3(0.0, 0.0, 0.0);
 }
 __global__ void render_init(int max_x, int max_y, curandState* rand_state) {
   int i = threadIdx.x + blockIdx.x * blockDim.x;
@@ -85,7 +85,7 @@ __global__ void render_init(int max_x, int max_y, curandState* rand_state) {
 
   int pxIdx = j * max_x + i;
   // Each thread gets same seed, diff seq number, no offset
-  curand_init(1984 + pxIdx, 0, 0, &rand_state[pxIdx]);
+  curand_init(1984, pxIdx, 0, &rand_state[pxIdx]);
 }
 
 __global__ void render(vec3* fb,
@@ -108,17 +108,25 @@ __global__ void render(vec3* fb,
   color c(0, 0, 0);
   color bg(0, 0, 0);
   for (int s = 0; s < ns; s++) {
-    float u = float(i + curand_uniform(&local_rand_state)) / float(max_x);
-    float v = float(j + curand_uniform(&local_rand_state)) / float(max_y);
+    float u = float(i + curand_uniform(&local_rand_state)) / float(max_x - 1);
+    float v = float(j + curand_uniform(&local_rand_state)) / float(max_y - 1);
     ray r = (*cam)->get_ray(u, v, &local_rand_state);
     // c += ray_color(r, world, max_depth, &local_rand_state);
     c += ray_color(r, bg, world, max_depth, &local_rand_state);
   }
   rand_state[pxIdx] = local_rand_state;
-  c /= float(ns);
-  c[0] = std::sqrt(c[0]);
-  c[1] = std::sqrt(c[1]);
-  c[2] = std::sqrt(c[2]);
+  float scale = 1.0f / ns;
+  if (c[0] != c[0])
+    c[0] = 0.0;
+  if (c[1] != c[1])
+    c[1] = 0.0;
+  if (c[2] != c[2])
+    c[2] = 0.0;
+
+  // c /= float(ns);
+  c[0] = std::sqrt(scale * c[0]);
+  c[1] = std::sqrt(scale * c[1]);
+  c[2] = std::sqrt(scale * c[2]);
   fb[pxIdx] = c;
 }
 

@@ -40,8 +40,8 @@ __device__ y_rotation::y_rotation(hit* p, float t_deg) : p_(p) {
     for (int j = 0; j < 2; j++) {
       for (int k = 0; k < 2; k++) {
         float x = i * bound_.max().getX();
-        float y = i * bound_.max().getY();
-        float z = i * bound_.max().getZ();
+        float y = j * bound_.max().getY();
+        float z = k * bound_.max().getZ();
 
         float x_out = cos_t * x + sin_t * z;
         float z_out = -sin_t * x + cos_t * z;
@@ -89,7 +89,7 @@ __device__ bool y_rotation::is_hit(const ray& r,
 
   rec.p = p;
 #ifdef MY_GLASS
-  rec.set_face(rot_r, rec.n);
+  rec.set_face(rot_r, n);
 #else
   bool front = dot(r.direction(), rec.n) < 0;
   rec.n = front ? rec.n : -rec.n;

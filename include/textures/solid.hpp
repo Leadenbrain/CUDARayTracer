@@ -7,7 +7,7 @@
 class solid : public uvTex {
  public:
   __device__ solid() {}
-  __device__ solid(const color& c) : col_(c) {}
+  explicit __device__ solid(const color& c) : col_(c) {}
 
   __device__ solid(const float& r, const float& g, const float& b)
       : solid(color(r, g, b)) {}

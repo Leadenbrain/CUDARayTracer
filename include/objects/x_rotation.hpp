@@ -30,15 +30,15 @@ __device__ x_rotation::x_rotation(hit* p, const float& t_deg) : p_(p) {
   cos_t = std::cos(t_rad);
   box_bool = p_->bound_box(0, 1, bound_);
 
-  point3 min(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+  point3 min(FLT_MIN, FLT_MIN, FLT_MIN);
   point3 max(FLT_MAX, FLT_MAX, FLT_MAX);
 
   for (int i = 0; i < 2; i++) {
     for (int j = 0; j < 2; j++) {
       for (int k = 0; k < 2; k++) {
         float x = i * bound_.max().getX();
-        float y = i * bound_.max().getY();
-        float z = i * bound_.max().getZ();
+        float y = j * bound_.max().getY();
+        float z = k * bound_.max().getZ();
 
         float y_out = cos_t * y - sin_t * z;
         float z_out = sin_t * y + cos_t * z;
@@ -86,7 +86,7 @@ __device__ bool x_rotation::is_hit(const ray& r,
 
   rec.p = p;
 #ifdef MY_GLASS
-  rec.set_face(rot_r, rec.n);
+  rec.set_face(rot_r, n);
 #else
   bool front = dot(r.direction(), rec.n) < 0;
   rec.n = front ? rec.n : -rec.n;

@@ -5,7 +5,7 @@
 
 class glass : public material {
  public:
-  __device__ glass(const float& index) : eta_(index) {}
+  explicit __device__ glass(const float& index) : eta_(index) {}
   __device__ virtual bool scatter(
       const ray& r,
       const hit_rec& rec,

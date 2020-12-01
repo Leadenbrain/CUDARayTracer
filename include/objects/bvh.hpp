@@ -81,7 +81,7 @@ __device__ bvh_node::bvh_node(hit** src,
   // FIXME: NEED OBJ = src
   auto obj = src;
   float rand = curand_uniform(local_rand_state);
-  rand *= (2.999999);
+  rand *= (2.999999f);
   int axis = (int)truncf(rand);
 
   auto comparator = (axis == 0) ? x_comp : (axis == 1) ? y_comp : z_comp;
@@ -107,8 +107,8 @@ __device__ bvh_node::bvh_node(hit** src,
 
   BB bL, bR;
 
-  //   if (!left_->bound_box(t0, t1, bL) || !right_->bound_box(t0, t1, bR))
-  // catch;
+  if (!left_->bound_box(t0, t1, bL) || !right_->bound_box(t0, t1, bR))
+    printf("ERROR NO BOX IN BVH NODE CONSTRUCTOR");
   box = surround_box(bL, bR);
 }
 

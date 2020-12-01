@@ -7,8 +7,8 @@
 class diffuse_light : public material {
  public:
   __device__ diffuse_light() {}
-  __device__ diffuse_light(color c) : c_(new solid(c)) {}
-  __device__ diffuse_light(uvTex* c) : c_(c) {}
+  explicit __device__ diffuse_light(color c) : c_(new solid(c)) {}
+  explicit __device__ diffuse_light(uvTex* c) : c_(c) {}
 
   __device__ bool scatter(const ray&,
                           const hit_rec&,
