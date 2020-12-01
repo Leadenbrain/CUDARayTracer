@@ -33,7 +33,7 @@ __device__ y_rotation::y_rotation(hit* p, float t_deg) : p_(p) {
   //   box_bool = false;
   box_bool = p_->bound_box(0, 1, bound_);
 
-  point3 min(FLT_MIN, FLT_MIN, FLT_MIN);
+  point3 min(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   point3 max(FLT_MAX, FLT_MAX, FLT_MAX);
 
   for (int i = 0; i < 2; i++) {

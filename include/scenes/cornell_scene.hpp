@@ -8,6 +8,7 @@
 #include "materials/metal.hpp"
 #include "objects/bvh.hpp"
 #include "objects/cube.hpp"
+#include "objects/iso_fog.hpp"
 #include "objects/moving_sphere.hpp"
 #include "objects/rectangle.hpp"
 #include "objects/translate.hpp"
@@ -28,6 +29,8 @@ __global__ void create_cornell_scene(hit** d_list,
     diffuse* red = new diffuse(color(0.65, 0.05, 0.05));
     diffuse* white = new diffuse(color(0.73, 0.73, 0.73));
     diffuse* green = new diffuse(color(0.12, 0.45, 0.15));
+
+    // diffuse_light* light = new diffuse_light(color(15, 15., 15));
     diffuse_light* light = new diffuse_light(color(26.656, 15.375, 3.5625));
 
     d_list[0] = new yz_rectangle(0, 548.8, 0, 559.2, 556, red);
@@ -39,10 +42,14 @@ __global__ void create_cornell_scene(hit** d_list,
     hit* b1 = new cube(point3(0, 0, 0), point3(165, 330, 165), white);
     b1 = new y_rotation(b1, 15.0f);
     b1 = new translate(b1, vec3(265, 0, 295));
+    // iso_fog* fog1 = new iso_fog(b1, 0.01f, color(1, 1, 1),
+    // &local_rand_state);
     d_list[6] = b1;
     hit* b2 = new cube(point3(0, 0, 0), point3(165, 165, 165), white);
     b2 = new y_rotation(b2, -18.0f);
     b2 = new translate(b2, vec3(130, 0, 65));
+    // iso_fog* fog2 = new iso_fog(b2, 0.01f, color(1, 0, 1),
+    // &local_rand_state);
     d_list[7] = b2;
 
     vec3 from(278.0f, 278.0f, -800.0f);

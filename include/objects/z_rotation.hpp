@@ -30,7 +30,7 @@ __device__ z_rotation::z_rotation(hit* p, const float& t_deg) : p_(p) {
   cos_t = std::cos(t_rad);
   box_bool = p_->bound_box(0, 1, bound_);
 
-  point3 min(FLT_MIN, FLT_MIN, FLT_MIN);
+  point3 min(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   point3 max(FLT_MAX, FLT_MAX, FLT_MAX);
 
   for (int i = 0; i < 2; i++) {
